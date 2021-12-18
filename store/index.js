@@ -96,6 +96,7 @@ export const actions = {
     const result = await this.$axios.$get(
       'https://boss.smartlink.id/salary/inquiry'
     )
+    console.log(result.data)
     if (result.success) {
       commit('setInquiry', result.data)
       commit('setWageItems', result.data)

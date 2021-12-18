@@ -1,6 +1,6 @@
 <template>
   <ModalBase @onClose="close">
-    <template v-slot:header> Ubah Gaji Pokok </template>
+    <template v-slot:header> Ubah {{ item.nama }} </template>
     <template v-slot:body>
       <div class="py-2">
         <label class="text-xs text-gray-400">Nominal</label>
@@ -36,19 +36,8 @@
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            <div class="flex flex-row justify-end">
-              <div class="h-8 w-8">
-                <input
-                  type="number"
-                  class="h-full w-full border rounded-l px-2"
-                  v-model="period"
-                />
-              </div>
-              <div
-                class="border px-2 text-sm h-8 rounded-r flex justify-center items-center bg-gray-200"
-              >
-                Periode
-              </div>
+            <div class="w-16 text-right">
+              {{ inquiry.total_kehadiran }} Hari
             </div>
           </div>
           <div class="flex flex-row justify-between items-center text-sm mt-2">
@@ -76,20 +65,21 @@ export default {
   data() {
     return {
       nominal: 0,
-      period: 1,
     }
   },
+  props: ['item'],
   methods: {
     close() {
       this.$emit('onClose')
     },
     save() {
-      const updatedSalary = this.inquiry.pengaturan_gaji.map((item) =>
-        item.jenis === 'periode' ? { ...item, nominal: this.nominal } : item
+      const updatedSalary = this.inquiry.pengaturan_gaji.map((salaryItem) =>
+        salaryItem.id === this.item.id
+          ? { ...salaryItem, nominal: this.nominal }
+          : salaryItem
       )
 
       this.$store.commit('updateInquiry', {
-        total_periode: this.period,
         pengaturan_gaji: updatedSalary,
       })
       this.$store.commit('setSubTotalSalary')
@@ -98,7 +88,6 @@ export default {
   },
   mounted() {
     this.nominal = this.salaryItem.nominal
-    this.period = this.inquiry.total_periode
   },
   computed: {
     inquiry() {
@@ -106,11 +95,11 @@ export default {
     },
     salaryItem() {
       return this.inquiry.pengaturan_gaji.find(
-        (item) => item.jenis === 'periode'
+        (item) => item.id === this.item.id
       )
     },
     total() {
-      return this.nominal * this.period
+      return this.nominal * this.inquiry.total_kehadiran
     },
   },
 }

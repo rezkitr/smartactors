@@ -44,7 +44,7 @@
           :type="slrItem.jenis"
           :totalPeriod="inquiry.total_periode"
           :totalPresence="inquiry.total_kehadiran"
-          @showSalaryModal="showSalaryModal(slrItem.jenis)"
+          @showSalaryModal="showSalaryModal(slrItem)"
         />
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Gaji</h5>
@@ -234,6 +234,11 @@
       v-if="showBasicSalaryModal"
       @onClose="toggleModal('bscslr')"
     />
+    <ModalEditCompensationSalary
+      v-if="showCompensationSalaryModal"
+      @onClose="toggleModal('cmpslr')"
+      :item="selectedCompensationSalary"
+    />
   </div>
 </template>
 
@@ -246,6 +251,8 @@ export default {
       DATE_FORMAT: 'DD MMMM YYYY',
       showPresenceModal: false,
       showBasicSalaryModal: false,
+      showCompensationSalaryModal: false,
+      selectedCompensationSalary: null,
     }
   },
   mounted() {
@@ -260,15 +267,23 @@ export default {
         case 'bscslr':
           this.showBasicSalaryModal = !this.showBasicSalaryModal
           break
+        case 'cmpslr':
+          if (this.showCompensationSalaryModal) {
+            this.selectedCompensationSalary = null
+          }
+          this.showCompensationSalaryModal = !this.showCompensationSalaryModal
+          break
 
         default:
           break
       }
     },
-    showSalaryModal(type) {
-      if (type === 'periode') {
+    showSalaryModal(item) {
+      if (item.jenis === 'periode') {
         this.toggleModal('bscslr')
-      } else if (type === 'kehadiran') {
+      } else if (item.jenis === 'kehadiran') {
+        this.selectedCompensationSalary = item
+        this.toggleModal('cmpslr')
       }
     },
   },
