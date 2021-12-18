@@ -40,7 +40,7 @@
           v-for="slrItem in inquiry.pengaturan_gaji"
           :key="slrItem.id"
           :name="slrItem.nama"
-          :amount="slrItem.nominal"
+          :nominal="slrItem.nominal"
           :type="slrItem.jenis"
           :totalPeriod="inquiry.total_periode"
           :totalPresence="inquiry.total_kehadiran"
@@ -82,8 +82,9 @@
       </div>
       <div class="px-4 py-4">
         <div class="mb-4">
-          <div
-            class="flex items-center text-blue-400 hover:text-blue-500 cursor-pointer"
+          <button
+            class="flex items-center text-blue-400 hover:text-blue-500"
+            @click="showCmsModal(null)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -100,14 +101,20 @@
               />
             </svg>
             <p class="ml-1">Tambah komisi lain...</p>
-          </div>
+          </button>
         </div>
         <!-- commission item -->
+
         <div v-if="inquiry.komisi.length">
-          <CommissionItem v-for="comItem in inquiry.komisi" :key="comItem.id" />
+          <CommissionItem
+            v-for="comItem in inquiry.komisi"
+            :key="comItem.id"
+            :item="comItem"
+            @showCommissionModal="showCmsModal"
+          />
           <div class="flex justify-between items-center mt-4">
             <h5 class="font-bold">Subtotal Komisi</h5>
-            <h5 class="font-bold">Rp 200.000</h5>
+            <h5 class="font-bold">Rp {{ subTotalCommission }}</h5>
           </div>
         </div>
       </div>
@@ -239,6 +246,11 @@
       @onClose="toggleModal('cmpslr')"
       :item="selectedCompensationSalary"
     />
+    <ModalEditCommission
+      v-if="showCommissionModal"
+      @onClose="toggleModal('cms')"
+      :item="selectedCommission"
+    />
   </div>
 </template>
 
@@ -253,6 +265,8 @@ export default {
       showBasicSalaryModal: false,
       showCompensationSalaryModal: false,
       selectedCompensationSalary: null,
+      showCommissionModal: false,
+      selectedCommission: null,
     }
   },
   mounted() {
@@ -273,6 +287,12 @@ export default {
           }
           this.showCompensationSalaryModal = !this.showCompensationSalaryModal
           break
+        case 'cms':
+          if (this.showCommissionModal) {
+            this.selectedCommission = null
+          }
+          this.showCommissionModal = !this.showCommissionModal
+          break
 
         default:
           break
@@ -285,6 +305,12 @@ export default {
         this.selectedCompensationSalary = item
         this.toggleModal('cmpslr')
       }
+    },
+    showCmsModal(value) {
+      if (value) {
+        this.selectedCommission = value
+      }
+      this.toggleModal('cms')
     },
   },
   computed: {
@@ -303,6 +329,9 @@ export default {
     },
     subTotalSalary() {
       return this.$store.state.subTotalSalary
+    },
+    subTotalCommission() {
+      return this.$store.state.subTotalCommission
     },
     wageItems() {
       return this.$store.state.wageItems

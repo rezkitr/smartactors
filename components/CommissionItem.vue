@@ -1,11 +1,11 @@
 <template>
   <div class="flex justify-between items-center pb-4 border-b border-dashed">
     <div>
-      <h6 class="text-base font-semibold">Bonus Target 1</h6>
+      <h6 class="text-base font-semibold">{{ item.nama }}</h6>
     </div>
     <div class="flex justify-end items-center">
-      <p class="mr-3">200.000</p>
-      <a href="/" class="text-base text-blue-400 font-semibold">
+      <p class="mr-3">{{ item.nominal }}</p>
+      <button class="text-base text-blue-400 font-semibold" @click="showModal">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -21,13 +21,20 @@
             clip-rule="evenodd"
           />
         </svg>
-      </a>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['item'],
+  methods: {
+    showModal() {
+      this.$emit('showCommissionModal', this.item)
+    },
+  },
+}
 </script>
 
 <style></style>

@@ -3,10 +3,10 @@
     <div>
       <h6 class="text-base font-semibold">{{ name }}</h6>
       <p v-if="type === 'periode'" class="text-sm text-gray-400">
-        {{ amount }} x {{ totalPeriod }} periode
+        {{ nominal }} x {{ totalPeriod }} periode
       </p>
       <p v-else-if="type === 'kehadiran'" class="text-sm text-gray-400">
-        {{ amount }} x {{ totalPresence }} kehadiran
+        {{ nominal }} x {{ totalPresence }} kehadiran
       </p>
     </div>
     <div class="flex justify-end items-center">
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  props: ['name', 'amount', 'type', 'totalPeriod', 'totalPresence'],
+  props: ['name', 'nominal', 'type', 'totalPeriod', 'totalPresence'],
   methods: {
     showModal() {
       this.$emit('showSalaryModal')
@@ -43,9 +43,9 @@ export default {
   computed: {
     subtotalItem() {
       if (this.type === 'periode') {
-        return this.amount * this.totalPeriod
+        return this.nominal * this.totalPeriod
       } else if (this.type === 'kehadiran') {
-        return this.amount * this.totalPresence
+        return this.nominal * this.totalPresence
       }
     },
   },
