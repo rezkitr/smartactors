@@ -85,7 +85,7 @@ export default {
       this.$store.commit('subtractPresence')
     },
     clear() {
-      this.$store.commit('updateInquiry', {
+      this.$store.commit('resetInquiry', {
         total_kehadiran: this.originPresence,
       })
       this.$store.commit('setSubTotalSalary')

@@ -86,6 +86,55 @@ export const mutations = {
       total_kehadiran: state.inquiry.total_kehadiran - 1,
     }
   },
+  resetInquiry(state, data) {
+    state.inquiry = { ...state.inquiry, ...data }
+  },
+  updateBasicSalary(state, data) {
+    const updatedSalary = state.inquiry.pengaturan_gaji.map((item) =>
+      item.jenis === 'periode' ? { ...item, nominal: data.nominal } : item
+    )
+    state.inquiry = {
+      ...state.inquiry,
+      total_periode: data.total_periode,
+      pengaturan_gaji: updatedSalary,
+    }
+  },
+  updateCompensationSalary(state, data) {
+    const updatedSalary = state.inquiry.pengaturan_gaji.map((item) =>
+      item.id === data.id ? { ...item, nominal: data.nominal } : item
+    )
+    state.inquiry = {
+      ...state.inquiry,
+      pengaturan_gaji: updatedSalary,
+    }
+  },
+  addCommission(state, data) {
+    state.inquiry = {
+      ...state.inquiry,
+      komisi: [...state.inquiry.komisi, data],
+    }
+  },
+  updateCommission(state, data) {
+    const updatedCommission = state.inquiry.komisi.map((item) =>
+      item.id === data.id
+        ? { ...item, nama: data.name, nominal: data.nominal }
+        : item
+    )
+    state.inquiry = {
+      ...state.inquiry,
+      komisi: updatedCommission,
+    }
+  },
+  deleteCommission(state, id) {
+    const updatedCommission = state.inquiry.komisi.filter(
+      (item) => item.id !== id
+    )
+
+    state.inquiry = {
+      ...state.inquiry,
+      komisi: updatedCommission,
+    }
+  },
   updateInquiry(state, data) {
     state.inquiry = { ...state.inquiry, ...data }
   },

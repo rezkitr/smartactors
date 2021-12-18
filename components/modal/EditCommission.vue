@@ -70,33 +70,34 @@ export default {
     },
     save() {
       if (this.item) {
-        // update
-      } else {
-        this.$store.commit('updateInquiry', {
-          komisi: [
-            ...this.comission,
-            { id: uuidv4(), nama: this.name, nominal: parseInt(this.nominal) },
-          ],
+        this.$store.commit('updateCommission', {
+          id: this.item.id,
+          name: this.name,
+          nominal: parseInt(this.nominal),
         })
-        this.$store.commit('setSubTotalCommission')
-        this.close()
+      } else {
+        this.$store.commit('addCommission', {
+          id: uuidv4(),
+          nama: this.name,
+          nominal: parseInt(this.nominal),
+        })
       }
+      this.$store.commit('setSubTotalCommission')
+      this.close()
     },
     clear() {
       if (this.item) {
-        // delete
-      } else {
-        this.close()
+        this.$store.commit('deleteCommission', this.item.id)
+        this.$store.commit('setSubTotalCommission')
       }
+      this.close()
     },
   },
   mounted() {
-    console.log('>>', this.item)
-  },
-  computed: {
-    comission() {
-      return this.$store.state.inquiry.komisi
-    },
+    if (this.item) {
+      this.name = this.item.nama
+      this.nominal = this.item.nominal
+    }
   },
 }
 </script>

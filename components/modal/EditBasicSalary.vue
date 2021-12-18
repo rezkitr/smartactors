@@ -84,13 +84,9 @@ export default {
       this.$emit('onClose')
     },
     save() {
-      const updatedSalary = this.inquiry.pengaturan_gaji.map((item) =>
-        item.jenis === 'periode' ? { ...item, nominal: this.nominal } : item
-      )
-
-      this.$store.commit('updateInquiry', {
+      this.$store.commit('updateBasicSalary', {
         total_periode: this.period,
-        pengaturan_gaji: updatedSalary,
+        nominal: this.nominal,
       })
       this.$store.commit('setSubTotalSalary')
       this.close()
