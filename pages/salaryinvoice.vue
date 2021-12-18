@@ -44,7 +44,7 @@
           :type="slrItem.jenis"
           :totalPeriod="inquiry.total_periode"
           :totalPresence="inquiry.total_kehadiran"
-          @showSalaryModal="showSalaryModal(slrItem)"
+          @showSalaryModal="setShowSalaryModal(slrItem)"
         />
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Gaji</h5>
@@ -84,7 +84,7 @@
         <div class="mb-4">
           <button
             class="flex items-center text-blue-400 hover:text-blue-500"
-            @click="showCmsModal(null)"
+            @click="setShowCommissionModal(null)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +110,7 @@
             v-for="comItem in inquiry.komisi"
             :key="comItem.id"
             :item="comItem"
-            @showCommissionModal="showCmsModal"
+            @showCommissionModal="setShowCommissionModal"
           />
           <div class="flex justify-between items-center mt-4">
             <h5 class="font-bold">Subtotal Komisi</h5>
@@ -140,8 +140,9 @@
       </div>
       <div class="px-4 py-4">
         <div class="mb-4">
-          <div
-            class="flex items-center text-blue-400 hover:text-blue-500 cursor-pointer"
+          <button
+            class="flex items-center text-blue-400 hover:text-blue-500"
+            @click="setShowFinePaymentModal(null)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +159,7 @@
               />
             </svg>
             <p class="ml-1">Tambah pembayaran tanggungan...</p>
-          </div>
+          </button>
         </div>
         <div
           class="flex justify-between items-center pb-4 border-b border-dashed"
@@ -251,6 +252,11 @@
       @onClose="toggleModal('cms')"
       :item="selectedCommission"
     />
+    <ModalEditFinePayment
+      v-if="showFinePaymentModal"
+      @onClose="toggleModal('fpm')"
+      :item="selectedFinePayment"
+    />
   </div>
 </template>
 
@@ -267,6 +273,8 @@ export default {
       selectedCompensationSalary: null,
       showCommissionModal: false,
       selectedCommission: null,
+      showFinePaymentModal: false,
+      selectedFinePayment: null,
     }
   },
   mounted() {
@@ -293,12 +301,18 @@ export default {
           }
           this.showCommissionModal = !this.showCommissionModal
           break
+        case 'fpm':
+          if (this.showFinePaymentModal) {
+            this.selectedFinePayment = null
+          }
+          this.showFinePaymentModal = !this.showFinePaymentModal
+          break
 
         default:
           break
       }
     },
-    showSalaryModal(item) {
+    setShowSalaryModal(item) {
       if (item.jenis === 'periode') {
         this.toggleModal('bscslr')
       } else if (item.jenis === 'kehadiran') {
@@ -306,11 +320,17 @@ export default {
         this.toggleModal('cmpslr')
       }
     },
-    showCmsModal(value) {
+    setShowCommissionModal(value) {
       if (value) {
         this.selectedCommission = value
       }
       this.toggleModal('cms')
+    },
+    setShowFinePaymentModal(value) {
+      if (value) {
+        this.selectedFinePayment = value
+      }
+      this.toggleModal('fpm')
     },
   },
   computed: {

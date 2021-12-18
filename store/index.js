@@ -142,9 +142,7 @@ export const mutations = {
 
 export const actions = {
   async getInquiry({ commit }) {
-    const result = await this.$axios.$get(
-      'https://boss.smartlink.id/salary/inquiry'
-    )
+    const result = await this.$axios.$get('/inquiry')
     console.log(result.data)
     if (result.success) {
       commit('setInquiry', result.data)
