@@ -36,16 +36,18 @@
       </div>
       <div class="px-4 py-4">
         <!-- salary item -->
-        <SalaryItem
-          v-for="slrItem in inquiry.pengaturan_gaji"
-          :key="slrItem.id"
-          :name="slrItem.nama"
-          :nominal="slrItem.nominal"
-          :type="slrItem.jenis"
-          :totalPeriod="inquiry.total_periode"
-          :totalPresence="inquiry.total_kehadiran"
-          @showSalaryModal="setShowSalaryModal(slrItem)"
-        />
+        <div class="pb-4 border-b border-dashed">
+          <SalaryItem
+            v-for="slrItem in inquiry.pengaturan_gaji"
+            :key="slrItem.id"
+            :name="slrItem.nama"
+            :nominal="slrItem.nominal"
+            :type="slrItem.jenis"
+            :totalPeriod="inquiry.total_periode"
+            :totalPresence="inquiry.total_kehadiran"
+            @showSalaryModal="setShowSalaryModal(slrItem)"
+          />
+        </div>
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Gaji</h5>
           <h5 class="font-bold">Rp {{ subTotalSalary }}</h5>
@@ -60,14 +62,16 @@
       </div>
       <div class="px-4 py-4">
         <!-- wage item -->
-        <WageItem
-          v-for="wageItem in wageItems"
-          :key="wageItem.id"
-          :name="wageItem.nama"
-          :unit="wageItem.satuan"
-          :nominal="wageItem.nominal"
-          :donominal="wageItem.nominal_pengerjaan"
-        />
+        <div class="pb-4 border-b border-dashed">
+          <WageItem
+            v-for="wageItem in wageItems"
+            :key="wageItem.id"
+            :name="wageItem.nama"
+            :unit="wageItem.satuan"
+            :nominal="wageItem.nominal"
+            :donominal="wageItem.nominal_pengerjaan"
+          />
+        </div>
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Upah</h5>
           <h5 class="font-bold">Rp {{ subTotalWage }}</h5>
@@ -104,14 +108,15 @@
           </button>
         </div>
         <!-- commission item -->
-
         <div v-if="inquiry.komisi.length">
-          <CommissionItem
-            v-for="comItem in inquiry.komisi"
-            :key="comItem.id"
-            :item="comItem"
-            @showCommissionModal="setShowCommissionModal"
-          />
+          <div class="pb-4 border-b border-dashed">
+            <CommissionItem
+              v-for="comItem in inquiry.komisi"
+              :key="comItem.id"
+              :item="comItem"
+              @showCommissionModal="setShowCommissionModal"
+            />
+          </div>
           <div class="flex justify-between items-center mt-4">
             <h5 class="font-bold">Subtotal Komisi</h5>
             <h5 class="font-bold">Rp {{ subTotalCommission }}</h5>
@@ -134,8 +139,8 @@
     <div class="bg-white w-full mb-3">
       <div class="border-b py-4 px-4">
         <h5 class="font-bold">Tanggungan</h5>
-        <p class="text-sm text-gray-400">
-          Karyawan ini memiliki tanggungan Rp 570.000
+        <p v-if="paidFine !== 0" class="text-xs sm:text-sm text-gray-400">
+          Karyawan ini memiliki tanggungan Rp {{ paidFine }}
         </p>
       </div>
       <div class="px-4 py-4">
@@ -161,37 +166,19 @@
             <p class="ml-1">Tambah pembayaran tanggungan...</p>
           </button>
         </div>
-        <div
-          class="flex justify-between items-center pb-4 border-b border-dashed"
-        >
-          <div>
-            <h6 class="text-base font-semibold">Ganti Barang Hilang</h6>
-            <p class="text-sm text-gray-400">Baju hilang warna merah</p>
+        <div v-if="inquiry.tanggungan.length">
+          <div class="pb-4 border-b border-dashed">
+            <FinePaymentItem
+              v-for="fpmItem in inquiry.tanggungan"
+              :key="fpmItem.id"
+              :item="fpmItem"
+              @showFinePaymentModal="setShowFinePaymentModal"
+            />
           </div>
-          <div class="flex justify-end items-center text-red-400">
-            <p class="mr-3">200.000</p>
-            <a href="/" class="text-base font-semibold">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </a>
+          <div class="flex justify-between items-center mt-4">
+            <h5 class="font-bold">Tanggungan Dibayar</h5>
+            <h5 class="font-bold text-red-400">(-) Rp {{ paidFine }}</h5>
           </div>
-        </div>
-        <div class="flex justify-between items-center mt-4">
-          <h5 class="font-bold">Tanggungan Dibayar</h5>
-          <h5 class="font-bold text-red-400">(-) Rp 200.000</h5>
         </div>
       </div>
     </div>
@@ -352,6 +339,9 @@ export default {
     },
     subTotalCommission() {
       return this.$store.state.subTotalCommission
+    },
+    paidFine() {
+      return this.$store.state.paidFine
     },
     wageItems() {
       return this.$store.state.wageItems

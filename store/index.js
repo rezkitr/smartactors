@@ -117,7 +117,7 @@ export const mutations = {
   updateCommission(state, data) {
     const updatedCommission = state.inquiry.komisi.map((item) =>
       item.id === data.id
-        ? { ...item, nama: data.name, nominal: data.nominal }
+        ? { ...item, nama: data.nama, nominal: data.nominal }
         : item
     )
     state.inquiry = {
@@ -135,8 +135,32 @@ export const mutations = {
       komisi: updatedCommission,
     }
   },
-  updateInquiry(state, data) {
-    state.inquiry = { ...state.inquiry, ...data }
+  addPaidFine(state, data) {
+    state.inquiry = {
+      ...state.inquiry,
+      tanggungan: [...state.inquiry.tanggungan, data],
+    }
+  },
+  updatePaidFine(state, data) {
+    const updatedPaidFine = state.inquiry.tanggungan.map((item) =>
+      item.id === data.id
+        ? { ...item, nama: data.nama, keterangan: data.keterangan }
+        : item
+    )
+    state.inquiry = {
+      ...state.inquiry,
+      tanggungan: updatedPaidFine,
+    }
+  },
+  deletePaidFine(state, id) {
+    const updatedPaidFine = state.inquiry.tanggungan.filter(
+      (item) => item.id !== id
+    )
+
+    state.inquiry = {
+      ...state.inquiry,
+      tanggungan: updatedPaidFine,
+    }
   },
 }
 

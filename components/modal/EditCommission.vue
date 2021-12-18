@@ -72,7 +72,7 @@ export default {
       if (this.item) {
         this.$store.commit('updateCommission', {
           id: this.item.id,
-          name: this.name,
+          nama: this.name,
           nominal: parseInt(this.nominal),
         })
       } else {

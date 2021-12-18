@@ -2,10 +2,11 @@
   <div class="flex justify-between items-center mb-1">
     <div>
       <h6 class="text-base font-semibold">{{ item.nama }}</h6>
+      <p class="text-sm text-gray-400">{{ item.keterangan }}</p>
     </div>
-    <div class="flex justify-end items-center">
+    <div class="flex justify-end items-center text-red-400">
       <p class="mr-3">{{ item.nominal }}</p>
-      <button class="text-base text-blue-400 font-semibold" @click="showModal">
+      <button class="text-base font-semibold" @click="showModal">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -31,7 +32,7 @@ export default {
   props: ['item'],
   methods: {
     showModal() {
-      this.$emit('showCommissionModal', this.item)
+      this.$emit('showFinePaymentModal', this.item)
     },
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center pb-4 border-b border-dashed">
+  <div class="flex justify-between items-center mb-1">
     <div>
       <h6 class="text-base font-semibold capitalize">{{ name }}</h6>
       <p class="text-sm text-gray-400">{{ donominal }} {{ unit }}</p>
