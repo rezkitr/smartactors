@@ -17,7 +17,7 @@
               <div class="h-8 flex-1">
                 <input
                   type="number"
-                  class="h-full w-full border rounded-r px-2"
+                  class="h-full w-full border rounded-r px-2 text-sm"
                   v-model="nominal"
                 />
               </div>
@@ -40,7 +40,7 @@
               <div class="h-8 w-8">
                 <input
                   type="number"
-                  class="h-full w-full border rounded-l px-2"
+                  class="h-full w-full border rounded-l px-2 text-sm"
                   v-model="period"
                 />
               </div>

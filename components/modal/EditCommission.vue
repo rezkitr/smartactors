@@ -10,7 +10,7 @@
             <input
               type="text"
               placeholder="Nama Komisi"
-              class="h-full w-full border rounded px-2"
+              class="h-full w-full border rounded px-2 text-sm"
               v-model="name"
             />
           </div>
@@ -27,7 +27,7 @@
               <input
                 type="number"
                 placeholder="Nominal"
-                class="h-full w-full border rounded-r px-2"
+                class="h-full w-full border rounded-r px-2 text-sm"
                 v-model="nominal"
               />
             </div>
