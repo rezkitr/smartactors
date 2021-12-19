@@ -211,11 +211,12 @@
           pembayaran tanggungan (jika ada).
         </p>
         <div class="mt-5">
-          <div
-            class="bg-blue-500 rounded text-white font-semibold text-center py-2 cursor-pointer"
+          <NuxtLink
+            to="/paymentdetails"
+            class="bg-blue-500 inline-block w-full rounded text-white font-semibold text-center py-2 cursor-pointer"
           >
             Berikutnya
-          </div>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -264,9 +265,7 @@ export default {
       selectedFinePayment: null,
     }
   },
-  mounted() {
-    this.$store.dispatch('getInquiry')
-  },
+  mounted() {},
   methods: {
     toggleModal(type) {
       switch (type) {
