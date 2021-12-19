@@ -3,10 +3,19 @@
     <!-- section 1 -->
     <div class="bg-white w-full mb-3">
       <div class="py-4 border-b text-center">
-        <h3 class="font-semibold">Faktur Gaji</h3>
+        <h3 v-if="!this.viewMode" class="font-semibold">Faktur Gaji</h3>
+        <h3 v-else class="font-semibold">Detail Faktur</h3>
       </div>
       <div class="px-4 py-4">
-        <div class="border-b border-dashed pb-4">
+        <div v-if="this.viewMode" class="mb-3">
+          <h2 class="font-bold text-lg mb-1">
+            {{ inquiry.id_karyawan }}
+          </h2>
+          <p class="text-base tracking-tight text-gray-500">
+            Dicatat: {{ recordDate }}
+          </p>
+        </div>
+        <div>
           <h2 class="font-bold text-lg mb-1">
             {{ inquiry.nama_karyawan }}
           </h2>
@@ -15,7 +24,10 @@
           </p>
         </div>
 
-        <div class="flex justify-between items-center mt-4">
+        <div
+          class="flex justify-between items-center mt-4 pt-4 border-t border-dashed"
+          v-if="!this.viewMode"
+        >
           <p class="text-base font-semibold text-gray-500">
             Masuk {{ inquiry.total_kehadiran }} Hari
           </p>
@@ -45,6 +57,7 @@
             :type="slrItem.jenis"
             :totalPeriod="inquiry.total_periode"
             :totalPresence="inquiry.total_kehadiran"
+            :viewMode="viewMode"
             @showSalaryModal="setShowSalaryModal(slrItem)"
           />
         </div>
@@ -70,6 +83,7 @@
             :unit="wageItem.satuan"
             :nominal="wageItem.nominal"
             :donominal="wageItem.nominal_pengerjaan"
+            :viewMode="viewMode"
           />
         </div>
         <div class="flex justify-between items-center mt-4">
@@ -85,7 +99,7 @@
         <h5 class="font-bold">Komisi</h5>
       </div>
       <div class="px-4 py-4">
-        <div class="mb-4">
+        <div v-if="!this.viewMode" class="mb-4">
           <button
             class="flex items-center text-blue-400 hover:text-blue-500"
             @click="setShowCommissionModal(null)"
@@ -114,6 +128,7 @@
               v-for="comItem in inquiry.komisi"
               :key="comItem.id"
               :item="comItem"
+              :viewMode="viewMode"
               @showCommissionModal="setShowCommissionModal"
             />
           </div>
@@ -144,7 +159,7 @@
         </p>
       </div>
       <div class="px-4 py-4">
-        <div class="mb-4">
+        <div v-if="!this.viewMode" class="mb-4">
           <button
             class="flex items-center text-blue-400 hover:text-blue-500"
             @click="setShowFinePaymentModal(null)"
@@ -172,6 +187,7 @@
               v-for="fpmItem in inquiry.tanggungan"
               :key="fpmItem.id"
               :item="fpmItem"
+              :viewMode="viewMode"
               @showFinePaymentModal="setShowFinePaymentModal"
             />
           </div>
@@ -184,7 +200,7 @@
     </div>
 
     <!-- section 7 -->
-    <div class="bg-white w-full">
+    <div class="bg-white w-full mb-3">
       <div class="p-4">
         <div
           class="flex justify-between items-center text-blue-400 font-bold text-lg xs:text-xl"
@@ -210,7 +226,7 @@
           Nominal akhir yang diterima karyawan setelah ditambah komisi dikurangi
           pembayaran tanggungan (jika ada).
         </p>
-        <div class="mt-5">
+        <div class="mt-5" v-if="!this.viewMode">
           <NuxtLink
             to="/paymentdetails"
             class="bg-blue-500 inline-block w-full rounded text-white font-semibold text-center py-2 cursor-pointer"
@@ -218,6 +234,18 @@
             Berikutnya
           </NuxtLink>
         </div>
+      </div>
+    </div>
+
+    <!-- section 8 -->
+    <div class="bg-white w-full mb-3" v-if="this.viewMode">
+      <div class="p-4">
+        <label class="text-xs text-gray-400">Keterangan</label>
+        <p>{{ inquiry.keterangan }}</p>
+
+        <button class="bg-gray-400 text-white w-full rounded py-2 mt-6">
+          Cetak
+        </button>
       </div>
     </div>
 
@@ -333,6 +361,11 @@ export default {
     },
     endDate() {
       return moment(new Date(this.inquiry.tanggal_akhir)).format(
+        this.DATE_FORMAT
+      )
+    },
+    recordDate() {
+      return moment(new Date(this.inquiry.tanggal_catat)).format(
         this.DATE_FORMAT
       )
     },

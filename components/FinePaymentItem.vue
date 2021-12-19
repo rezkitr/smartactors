@@ -5,8 +5,12 @@
       <p class="text-sm text-gray-400">{{ item.keterangan }}</p>
     </div>
     <div class="flex justify-end items-center text-red-400">
-      <p class="mr-3">{{ item.nominal }}</p>
-      <button class="text-base font-semibold" @click="showModal">
+      <p>{{ item.nominal }}</p>
+      <button
+        v-if="!this.viewMode"
+        class="text-base ml-3 font-semibold"
+        @click="showModal"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -29,7 +33,7 @@
 
 <script>
 export default {
-  props: ['item'],
+  props: ['item', 'viewMode'],
   methods: {
     showModal() {
       this.$emit('showFinePaymentModal', this.item)

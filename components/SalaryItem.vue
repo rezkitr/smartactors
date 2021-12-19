@@ -10,8 +10,12 @@
       </p>
     </div>
     <div class="flex justify-end items-center">
-      <p class="mr-3">{{ subtotalItem }}</p>
-      <button class="text-base text-blue-400 font-semibold" @click="showModal">
+      <p>{{ subtotalItem }}</p>
+      <button
+        v-if="!this.viewMode"
+        class="text-base text-blue-400 font-semibold ml-3"
+        @click="showModal"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5"
@@ -34,7 +38,14 @@
 
 <script>
 export default {
-  props: ['name', 'nominal', 'type', 'totalPeriod', 'totalPresence'],
+  props: [
+    'name',
+    'nominal',
+    'type',
+    'totalPeriod',
+    'totalPresence',
+    'viewMode',
+  ],
   methods: {
     showModal() {
       this.$emit('showSalaryModal')

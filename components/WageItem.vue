@@ -5,8 +5,11 @@
       <p class="text-sm text-gray-400">{{ donominal }} {{ unit }}</p>
     </div>
     <div class="flex justify-end items-center">
-      <p class="mr-3">{{ subtotalItem }}</p>
-      <a href="/" class="text-base text-gray-300 font-semibold">
+      <p>{{ subtotalItem }}</p>
+      <button
+        v-if="!this.viewMode"
+        class="text-base text-gray-300 ml-3 font-semibold"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-5"
@@ -21,14 +24,14 @@
             d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
           />
         </svg>
-      </a>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['name', 'unit', 'nominal', 'donominal'],
+  props: ['name', 'unit', 'nominal', 'donominal', 'viewMode'],
   computed: {
     subtotalItem() {
       return this.nominal * this.donominal

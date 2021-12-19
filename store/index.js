@@ -214,6 +214,7 @@ export const actions = {
         .then(
           (result) => {
             if (result.success) {
+              console.log(result.data)
               resolve()
               commit('setInquiry', result.data)
               commit('setWageItems', result.data)
