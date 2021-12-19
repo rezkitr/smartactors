@@ -1,5 +1,8 @@
 <template>
-  <div class="max-w-screen-sm mx-auto">
+  <div
+    class="max-w-screen-sm min-h-screen mx-auto border-2 flex flex-col"
+    v-if="banks"
+  >
     <div
       class="py-4 px-4 bg-white border-b text-center flex justify-center items-center"
     >
@@ -34,7 +37,7 @@
             <p>Subtotal Gaji</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp 2542000</p>
+            <p>Rp {{ subTotalSalary }}</p>
           </template>
         </PaymentDetailsItem>
         <PaymentDetailsItem class="font-semibold">
@@ -42,7 +45,7 @@
             <p>Subtotal Upah</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp 2542000</p>
+            <p>Rp {{ subTotalWage }}</p>
           </template>
         </PaymentDetailsItem>
         <PaymentDetailsItem class="font-semibold">
@@ -50,7 +53,7 @@
             <p>Subtotal Komisi</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp 2542000</p>
+            <p>Rp {{ subTotalCommission }}</p>
           </template>
         </PaymentDetailsItem>
 
@@ -59,7 +62,7 @@
             <p>Gaji Kotor</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp 2542000</p>
+            <p>Rp {{ totalGrossSalary }}</p>
           </template>
         </PaymentDetailsItem>
 
@@ -68,7 +71,7 @@
             <p class="text-sm">Tanggungan</p>
           </template>
           <template v-slot:nominal>
-            <p>(-) Rp 2542000</p>
+            <p>(-) Rp {{ paidFine }}</p>
           </template>
         </PaymentDetailsItem>
       </div>
@@ -77,67 +80,161 @@
           <p>Total Gaji Bersih</p>
         </template>
         <template v-slot:nominal>
-          <p>Rp 2542000</p>
+          <p>Rp {{ totalTakeHomePaySalary }}</p>
         </template>
       </PaymentDetailsItem>
     </div>
 
-    <div class="bg-white py-4 px-4">
+    <div class="bg-white py-4 px-4 border flex flex-col flex-1 justify-between">
       <div>
-        <label class="text-sm text-gray-400"
-          >Bayar dari Rekening
-          <span class="text-blue-500 font-semibold">*</span></label
-        >
-        <div class="h-8 px-2 border rounded">
-          <select
-            class="w-full h-full text-sm outline-none"
-            :class="{ 'text-gray-400': selectedBank === '0' }"
-            v-model="selectedBank"
+        <div>
+          <label class="text-sm text-gray-400"
+            >Bayar dari Rekening
+            <span class="text-blue-500 font-semibold">*</span></label
           >
-            <option value="0" disabled selected hidden>
-              Pilih Rekening Bank
-            </option>
-            <option value="BNI">BNI</option>
-          </select>
+          <div class="h-8 px-2 border rounded">
+            <select
+              class="w-full h-full text-sm outline-none"
+              :class="{ 'text-gray-400': selectedBank === 'select' }"
+              v-model="selectedBank"
+            >
+              <option
+                disabled
+                :selected="selectedBank === 'select'"
+                hidden
+                value="select"
+              >
+                Pilih Rekening Bank
+              </option>
+              <option
+                v-for="bank in banks"
+                :key="bank.nomor"
+                :value="bank"
+                class="text-black"
+              >
+                {{ bank.bank }} {{ bank.nomor }} - {{ bank.pemilik }}
+              </option>
+            </select>
+          </div>
+          <p class="text-red-500 text-xs mt-1" v-if="errorBank">
+            Silakan pilih Rekening Bank
+          </p>
+        </div>
+        <div class="mt-2">
+          <label class="text-sm text-gray-400"
+            >Dicatat pada Tanggal
+            <span class="text-blue-500 font-semibold">*</span></label
+          >
+          <date-picker
+            style="width: 100%; height: 100%"
+            v-model="selectedDate"
+            type="date"
+            format="DD-MM-YYYY"
+            placeholder="Pilih Tanggal"
+            input-class="outline-none border rounded w-full h-8 px-3 text-sm"
+          ></date-picker>
+          <p class="text-red-500 text-xs mt-1" v-if="errorDate">
+            Silakan pilih Tanggal Pencatatan
+          </p>
+        </div>
+        <div class="mt-2">
+          <label class="text-sm text-gray-400"
+            >Keterangan <span class="text-blue-500 font-semibold"></span
+          ></label>
+          <div class="h-8">
+            <input
+              type="text"
+              placeholder="Tambah Keterangan"
+              v-model="note"
+              class="w-full h-full px-2 border rounded text-sm"
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <label class="text-sm text-gray-400"
-          >Dicatat pada Tanggal
-          <span class="text-blue-500 font-semibold">*</span></label
+      <div class="mt-8">
+        <button
+          class="bg-blue-500 rounded w-full text-white py-2"
+          @click="submit"
         >
-        <div class="h-8 px-2 border rounded">
-          <!-- <input
-            class="text-sm w-full h-full outline-none"
-            type="text"
-            placeholder="Pilih tanggal"
-            onfocus="(this.type='date')"
-            onblur="(this.type='text')"
-            v-model="selectedDate"
-          /> -->
-          <input
-            type="date"
-            class="w-full h-full outline-none text-sm"
-            placeholder="Choose a Date"
-            v-model="selectedDate"
-          />
-        </div>
+          Submit Gaji
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
+import 'vue2-datepicker/locale/id'
+import moment from 'moment'
+
 export default {
+  components: { DatePicker },
   data() {
     return {
-      selectedBank: '0',
-      selectedDate: new Date(),
+      selectedBank: 'select',
+      selectedDate: null,
+      note: '',
+      errorBank: false,
+      errorDate: false,
     }
   },
-  methods: {},
+
+  methods: {
+    submit() {
+      if (this.selectedBank === 'select') {
+        this.errorBank = true
+      }
+      if (!this.selectedDate) {
+        this.errorDate = true
+      }
+      if (this.selectedBank !== 'select' && this.selectedDate) {
+        this.$store.dispatch('submit', {
+          rekening: this.selectedBank,
+          tanggal_catat: moment(this.selectedDate).format('YYYY-MM-DD'),
+          keterangan: this.note,
+        })
+      }
+    },
+  },
+  watch: {
+    selectedBank(newBank, oldBank) {
+      if (newBank !== 'select') {
+        this.errorBank = false
+      }
+    },
+    selectedDate(newDate, oldDate) {
+      if (newDate) {
+        this.errorDate = false
+      }
+    },
+  },
+  computed: {
+    banks() {
+      return this.$store.state.banks
+    },
+    subTotalSalary() {
+      return this.$store.state.subTotalSalary
+    },
+    subTotalCommission() {
+      return this.$store.state.subTotalCommission
+    },
+    paidFine() {
+      return this.$store.state.paidFine
+    },
+    subTotalWage() {
+      return this.$store.state.subTotalWage
+    },
+    totalGrossSalary() {
+      return this.$store.getters.totalGrossSalary
+    },
+    totalTakeHomePaySalary() {
+      return this.$store.getters.totalTakeHomePaySalary(this.totalGrossSalary)
+    },
+  },
   mounted() {
-    console.log(this.selectedBank)
+    this.$store.dispatch('getBanks')
   },
 }
 </script>

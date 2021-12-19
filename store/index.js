@@ -6,6 +6,7 @@ export const state = () => ({
   subTotalWage: 0,
   subTotalCommission: 0,
   paidFine: 0,
+  banks: null,
 })
 
 export const getters = {
@@ -162,19 +163,55 @@ export const mutations = {
       tanggungan: updatedPaidFine,
     }
   },
+
+  setBanks(state, data) {
+    state.banks = data
+  },
 }
 
 export const actions = {
   async getInquiry({ commit }) {
-    const result = await this.$axios.$get('/inquiry')
-    console.log(result.data)
-    if (result.success) {
-      commit('setInquiry', result.data)
-      commit('setWageItems', result.data)
-      commit('setSubTotalSalary')
-      commit('setSubTotalWage')
-      commit('setSubTotalCommission')
-      commit('setPaidFine')
+    try {
+      const result = await this.$axios.$get('/inquiry')
+      console.log(result.data)
+      if (result.success) {
+        commit('setInquiry', result.data)
+        commit('setWageItems', result.data)
+        commit('setSubTotalSalary')
+        commit('setSubTotalWage')
+        commit('setSubTotalCommission')
+        commit('setPaidFine')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async getBanks({ commit }) {
+    try {
+      const result = await this.$axios.$get('/bank')
+      if (result.success) {
+        commit('setBanks', result.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  async submit({ commit, state }, data) {
+    try {
+      const config = {
+        headers: { 'content-type': 'application/json' },
+      }
+      const result = await this.$axios.post(
+        '/save',
+        {
+          ...state.inquiry,
+          ...data,
+        },
+        config
+      )
+    } catch (error) {
+      console.log(error)
     }
   },
 }
