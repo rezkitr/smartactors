@@ -190,11 +190,15 @@ export default {
         this.errorDate = true
       }
       if (this.selectedBank !== 'select' && this.selectedDate) {
-        this.$store.dispatch('submit', {
-          rekening: this.selectedBank,
-          tanggal_catat: moment(this.selectedDate).format('YYYY-MM-DD'),
-          keterangan: this.note,
-        })
+        this.$store
+          .dispatch('submit', {
+            rekening: this.selectedBank,
+            tanggal_catat: moment(this.selectedDate).format('YYYY-MM-DD'),
+            keterangan: this.note,
+          })
+          .then(() => {
+            this.$router.push('/invoicedetails')
+          })
       }
     },
   },

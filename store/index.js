@@ -197,21 +197,36 @@ export const actions = {
     }
   },
 
-  async submit({ commit, state }, data) {
-    try {
-      const config = {
-        headers: { 'content-type': 'application/json' },
-      }
-      const result = await this.$axios.post(
-        '/save',
-        {
-          ...state.inquiry,
-          ...data,
-        },
-        config
-      )
-    } catch (error) {
-      console.log(error)
+  submit({ commit, state }, data) {
+    const config = {
+      headers: { 'content-type': 'application/json' },
     }
+    return new Promise((resolve, reject) => {
+      this.$axios
+        .$post(
+          '/save',
+          {
+            ...state.inquiry,
+            ...data,
+          },
+          config
+        )
+        .then(
+          (result) => {
+            if (result.success) {
+              resolve()
+              commit('setInquiry', result.data)
+              commit('setWageItems', result.data)
+              commit('setSubTotalSalary')
+              commit('setSubTotalWage')
+              commit('setSubTotalCommission')
+              commit('setPaidFine')
+            }
+          },
+          (error) => {
+            reject(error)
+          }
+        )
+    })
   },
 }
