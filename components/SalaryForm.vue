@@ -241,7 +241,8 @@
     <div class="bg-white w-full mb-3" v-if="this.viewMode">
       <div class="p-4">
         <label class="text-xs text-gray-400">Keterangan</label>
-        <p>{{ inquiry.keterangan }}</p>
+        <p v-if="inquiry.keterangan.length">{{ inquiry.keterangan }}</p>
+        <p v-else>-</p>
 
         <button class="bg-gray-400 text-white w-full rounded py-2 mt-6">
           Cetak
