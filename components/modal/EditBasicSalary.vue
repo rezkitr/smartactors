@@ -53,7 +53,7 @@
           </div>
           <div class="flex flex-row justify-between items-center text-sm mt-2">
             <p>Jumlah</p>
-            <p>Rp {{ total }}</p>
+            <p>Rp {{ total | currency }}</p>
           </div>
         </div>
       </div>
