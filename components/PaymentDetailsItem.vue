@@ -4,7 +4,7 @@
       <slot name="title"> Title </slot>
     </div>
     <div>
-      <slot name="nominal"> Nominal </slot>
+      <slot name="nominal">-</slot>
     </div>
   </div>
 </template>

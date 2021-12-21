@@ -5,7 +5,7 @@
       <p class="text-sm text-gray-400">{{ donominal }} {{ unit }}</p>
     </div>
     <div class="flex justify-end items-center">
-      <p>{{ subtotalItem }}</p>
+      <p>{{ subtotalItem | currency }}</p>
       <button
         v-if="!this.viewMode"
         class="text-base text-gray-300 ml-3 font-semibold"

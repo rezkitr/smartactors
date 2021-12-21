@@ -37,7 +37,7 @@
             <p>Subtotal Gaji</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp {{ subTotalSalary }}</p>
+            <p>Rp {{ subTotalSalary | currency }}</p>
           </template>
         </PaymentDetailsItem>
         <PaymentDetailsItem class="font-semibold">
@@ -45,15 +45,15 @@
             <p>Subtotal Upah</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp {{ subTotalWage }}</p>
+            <p>Rp {{ subTotalWage | currency }}</p>
           </template>
         </PaymentDetailsItem>
         <PaymentDetailsItem class="font-semibold">
           <template v-slot:title>
             <p>Subtotal Komisi</p>
           </template>
-          <template v-slot:nominal>
-            <p>Rp {{ subTotalCommission }}</p>
+          <template v-slot:nominal v-if="subTotalCommission > 0">
+            <p>Rp {{ subTotalCommission | currency }}</p>
           </template>
         </PaymentDetailsItem>
 
@@ -62,7 +62,7 @@
             <p>Gaji Kotor</p>
           </template>
           <template v-slot:nominal>
-            <p>Rp {{ totalGrossSalary }}</p>
+            <p>Rp {{ totalGrossSalary | currency }}</p>
           </template>
         </PaymentDetailsItem>
 
@@ -70,8 +70,8 @@
           <template v-slot:title>
             <p class="text-sm">Tanggungan</p>
           </template>
-          <template v-slot:nominal>
-            <p>(-) Rp {{ paidFine }}</p>
+          <template v-slot:nominal v-if="paidFine > 0">
+            <p>(-) Rp {{ paidFine | currency }}</p>
           </template>
         </PaymentDetailsItem>
       </div>
@@ -80,7 +80,7 @@
           <p>Total Gaji Bersih</p>
         </template>
         <template v-slot:nominal>
-          <p>Rp {{ totalTakeHomePaySalary }}</p>
+          <p>Rp {{ totalTakeHomePaySalary | currency }}</p>
         </template>
       </PaymentDetailsItem>
     </div>

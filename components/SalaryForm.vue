@@ -63,7 +63,7 @@
         </div>
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Gaji</h5>
-          <h5 class="font-bold">Rp {{ subTotalSalary }}</h5>
+          <h5 class="font-bold">Rp {{ subTotalSalary | currency }}</h5>
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@
         </div>
         <div class="flex justify-between items-center mt-4">
           <h5 class="font-bold">Subtotal Upah</h5>
-          <h5 class="font-bold">Rp {{ subTotalWage }}</h5>
+          <h5 class="font-bold">Rp {{ subTotalWage | currency }}</h5>
         </div>
       </div>
     </div>
@@ -134,7 +134,7 @@
           </div>
           <div class="flex justify-between items-center mt-4">
             <h5 class="font-bold">Subtotal Komisi</h5>
-            <h5 class="font-bold">Rp {{ subTotalCommission }}</h5>
+            <h5 class="font-bold">Rp {{ subTotalCommission | currency }}</h5>
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@
       <div class="flex justify-between items-center p-4">
         <h3 class="font-semibold text-gray-400 text-lg">Total Gaji Kotor</h3>
         <h3 class="font-semibold text-gray-400 text-lg">
-          Rp {{ totalGrossSalary }}
+          Rp {{ totalGrossSalary | currency }}
         </h3>
       </div>
     </div>
@@ -155,7 +155,7 @@
       <div class="border-b py-4 px-4">
         <h5 class="font-bold">Tanggungan</h5>
         <p v-if="paidFine !== 0" class="text-xs sm:text-sm text-gray-400">
-          Karyawan ini memiliki tanggungan Rp {{ paidFine }}
+          Karyawan ini memiliki tanggungan Rp {{ paidFine | currency }}
         </p>
       </div>
       <div class="px-4 py-4">
@@ -193,7 +193,9 @@
           </div>
           <div class="flex justify-between items-center mt-4">
             <h5 class="font-bold">Tanggungan Dibayar</h5>
-            <h5 class="font-bold text-red-400">(-) Rp {{ paidFine }}</h5>
+            <h5 class="font-bold text-red-400">
+              (-) Rp {{ paidFine | currency }}
+            </h5>
           </div>
         </div>
       </div>
@@ -220,7 +222,7 @@
               />
             </svg>
           </div>
-          <h2>Rp {{ totalTakeHomePaySalary }}</h2>
+          <h2>Rp {{ totalTakeHomePaySalary | currency }}</h2>
         </div>
         <p class="text-sm text-gray-400 mt-2">
           Nominal akhir yang diterima karyawan setelah ditambah komisi dikurangi

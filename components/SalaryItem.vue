@@ -10,7 +10,7 @@
       </p>
     </div>
     <div class="flex justify-end items-center">
-      <p>{{ subtotalItem }}</p>
+      <p>{{ subtotalItem | currency }}</p>
       <button
         v-if="!this.viewMode"
         class="text-base text-blue-400 font-semibold ml-3"
