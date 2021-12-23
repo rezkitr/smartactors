@@ -26,7 +26,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/persistedState.client.js' },
-    { src: '~/plugins/currency.js' },
+    { src: '~/plugins/currencyFormat.js' },
+    { src: '~/plugins/axios.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

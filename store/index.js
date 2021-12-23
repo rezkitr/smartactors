@@ -198,19 +198,15 @@ export const actions = {
   },
 
   submit({ commit, state }, data) {
-    const config = {
-      headers: { 'content-type': 'application/json' },
-    }
+    // const config = {
+    //   headers: { 'content-type': 'application/json' },
+    // }
     return new Promise((resolve, reject) => {
       this.$axios
-        .$post(
-          '/save',
-          {
-            ...state.inquiry,
-            ...data,
-          },
-          config
-        )
+        .$post('/save', {
+          ...state.inquiry,
+          ...data,
+        })
         .then(
           (result) => {
             if (result.success) {
